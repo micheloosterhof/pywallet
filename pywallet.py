@@ -168,19 +168,8 @@ class Network(
         pass
 
 
-def ethereum_keyinfo(self, keyinfo):
-    if keyinfo.compressed:
-        return
-    ethpubkey = keyinfo.public_key[1:]
-    eth_addr = binascii.hexlify(Keccak256(ethpubkey).digest()[-20:])
-    print("Ethereum address:    %s" % eth_addr)
-    print("Ethereum B58address: %s" % public_key_to_bc_address(eth_addr, 33))
-
-
 network_bitcoin = Network("Bitcoin", 0, 5, 0x80, "bc")
 network_bitcoin_testnet3 = Network("Bitcoin-Testnet3", 0x6F, 0xC4, 0xEF, "tb")
-network_ethereum = Network("Ethereum", 0, 5, 0x80, "eth")
-network_ethereum.keyinfo = MethodType(ethereum_keyinfo, network_ethereum)
 network = network_bitcoin
 
 wallet_dir = ""
@@ -2649,7 +2638,7 @@ def read_wallet(
         if include_balance:
             # 			print("%3d/%d  %s  %s" % (i, nkeys, k["addr"], k["balance"]))
             k["balance"] = balance(balance_site, k["addr"])
-            print("{} {} {}".format(i, nkeys, k["addr"], k["balance"]))
+            print("{} {} {} {}".format(i, nkeys, k["addr"], k["balance"]))
 
         if addr in json_db["names"].keys():
             k["label"] = json_db["names"][addr]
@@ -2882,6 +2871,7 @@ def importprivkey(db, sec, label, reserve, verbose=True):
 
 def balance(site, address):
     page = urllib.request.urlopen("%s%s" % (site, address))
+    time.sleep(1)
     return page.read()
 
 
