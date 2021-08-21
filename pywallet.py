@@ -1,15 +1,16 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #-*- coding: utf-8 -*-
+
 from __future__ import print_function
 pywversion="2.2"
 never_update=False
 
 #
-# jackjack's pywallet.py
+# micheloosterhof's pywallet.py
+# forked from
 # https://github.com/jackjack-jj/pywallet
 # forked from Joric's pywallet.py
 #
-
 
 import sys
 PY3 = sys.version_info.major > 2
@@ -31,12 +32,12 @@ else:
 missing_dep = []
 
 try:
-	from bsddb.db import *
+	from berkeleydb.db import *
 except:
 	try:
-		from bsddb3.db import *
+		from berkeleydb.db import *
 	except:
-		missing_dep.append('bsddb')
+		missing_dep.append('berkeleydb')
 
 import os, sys, time, re
 pyw_filename = os.path.basename(__file__)

@@ -1,4 +1,7 @@
-Requirements: Python 2.x, with bsddb and twisted packages
+Requirements: Python 3.x, with berkeleydb and twisted packages
+
+```YES_I_HAVE_THE_RIGHT_TO_USE_THIS_BERKELEY_DB_VERSION=1 pip install berkeleydb```
+
 
 Usage: pywallet.py [options]
 
@@ -44,7 +47,7 @@ Mac OS X:
 
 Windows: 
  1. Install Python 2.7
- 2. Install Twisted 11.0.0 for Py2.7, then Zope.Interface (a .egg file) for Py2.7: http://twistedmatrix.com/trac/wiki/Downloads
+ 2. Install Twisted 11.0.0 for Py2.7, then Zope.Interface (an .egg file) for Py2.7: http://twistedmatrix.com/trac/wiki/Downloads
 
  3. Untested, proposed by TeaRex: install Zope.Interface from http://www.lfd.uci.edu/~gohlke/pythonlibs
 
