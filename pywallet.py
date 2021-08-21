@@ -13,6 +13,8 @@ never_update = False
 
 import sys
 
+from typing import Dict, List
+
 PY3 = sys.version_info.major > 2
 
 import warnings
@@ -56,7 +58,7 @@ import traceback
 import socket
 import hashlib
 import random
-import urllib
+import urllib.request
 import math
 import base64
 import collections
@@ -206,7 +208,7 @@ def plural(a):
     return ""
 
 
-def systype():
+def systype() -> str:
     if platform.system() == "Darwin":
         return "Mac"
     elif platform.system() == "Windows":
@@ -1973,9 +1975,9 @@ if crypter is None:
 ##########################################
 
 
-def bytes_to_int(bytes):
+def bytes_to_int(data: bytes) -> int:
     result = 0
-    for b in bytes:
+    for b in data:
         result = result * 256 + ordsix(b)
     return result
 
@@ -3115,7 +3117,7 @@ def md5_file(nf):
 
 
 def md5_onlinefile(add):
-    page = urllib.urlopen(add).read()
+    page = urllib.request.urlopen(add).read()
     return md5_2(page)
 
 
@@ -4198,7 +4200,7 @@ def importprivkey(db, sec, label, reserve, verbose=True):
 
 
 def balance(site, address):
-    page = urllib.urlopen("%s%s" % (site, address))
+    page = urllib.request.urlopen("%s%s" % (site, address))
     return page.read()
 
 
@@ -4502,7 +4504,7 @@ def bc_address_to_available_tx(address, testnet=False):
     balance = 0
     txin_is_used = Bdict({})
 
-    page = urllib.urlopen("%s/%s" % (blockexplorer_url, address))
+    page = urllib.request.urlopen("%s/%s" % (blockexplorer_url, address))
     try:
         table = page.read().split('<table class="txtable">')[1]
         table = table.split("</table>")[0]
@@ -4540,7 +4542,7 @@ def bc_address_to_available_tx(address, testnet=False):
         balance = round(float(cell[i][5]), 8)
 
     for tx in txout:
-        pagetx = urllib.urlopen("http://blockexplorer.com/" + TN + "/tx/" + tx[0])
+        pagetx = urllib.request.urlopen("http://blockexplorer.com/" + TN + "/tx/" + tx[0])
         table_in = (
             pagetx.read()
             .split('<a name="outputs">Outputs</a>')[0]
@@ -4571,9 +4573,9 @@ empty_txout = Bdict({"amount": "", "script": ""})
 
 
 class tx:
-    ins = []
-    outs = []
-    tosign = False
+    ins: List[Dict[str, str]] = []
+    outs: List[Dict[str, str]] = []
+    tosign: bool = False
 
     def hashtypeone(index, script):
         global empty_txin
@@ -4583,7 +4585,7 @@ class tx:
         self.ins[index]["oldscript"] = s
         self.tosign = True
 
-    def copy():
+    def copy(self):
         r = tx()
         r.ins = self.ins[:]
         r.outs = self.outs[:]
@@ -4611,7 +4613,7 @@ class tx:
             binascii.unhexlify(sec), txcopy.get_tx(), True
         )
 
-    def ser():
+    def ser(self):
         r = Bdict({})
         r["ins"] = self.ins
         r["outs"] = self.outs
@@ -4624,7 +4626,7 @@ class tx:
         self.outs = s["outs"]
         self.tosign = s["tosign"]
 
-    def get_tx():
+    def get_tx(self):
         r = ""
         ret += inverse_str("%08x" % 1)
         ret += "%02x" % len(self.ins)
@@ -4680,7 +4682,7 @@ class tx:
 
 def update_pyw():
     if md5_last_pywallet[0] and md5_last_pywallet[1] not in md5_pywallet:
-        dl = urllib.urlopen(
+        dl = urllib.request.urlopen(
             "https://raw.github.com/jackjack-jj/pywallet/master/pywallet.py"
         ).read()
         if len(dl) > 40 and md5_2(dl) == md5_last_pywallet[1]:
@@ -4834,7 +4836,7 @@ def whitepaper():
             ]
         )
     except:
-        rawtx = urllib.urlopen(
+        rawtx = urllib.request.urlopen(
             "https://blockchain.info/tx/54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713?format=hex"
         ).read()
     outputs = rawtx.split("0100000000000000")
@@ -5550,6 +5552,7 @@ if __name__ == "__main__":
         if options.dumpformat == "addr":
             addrs = list(map(lambda x: x["addr"], json_db["keys"] + json_db["pool"]))
             json_db = addrs
+        print(repr(json_db))
         wallet = json.dumps(json_db, sort_keys=True, indent=4)
         print(wallet)
         sys.exit()
