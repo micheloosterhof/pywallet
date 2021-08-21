@@ -51,11 +51,7 @@ import os, sys, time, re
 pyw_filename = os.path.basename(__file__)
 pyw_path = os.path.dirname(os.path.realpath(__file__))
 
-try:
-    import simplejson as json
-except:
-    import json
-
+import json
 import hmac
 import getpass
 import logging
