@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-
 pywversion = "2.2"
 never_update = False
 
@@ -28,8 +26,6 @@ warnings.formatwarning = warning_on_one_line
 if PY3:
     warnings.warn("Python 3 support is still experimental, you may encounter bugs")
     import _thread as thread
-
-    raw_input = input
     xrange = range
     long = int
     unicode = str
@@ -2905,9 +2901,9 @@ def recov(device, passes, size=102400, inc=10240, outputdir="."):
                     ),
                 )
             )
-            cont = raw_input("Do you want to test them? (y/n): ")
+            cont = input("Do you want to test them? (y/n): ")
             while len(cont) == 0:
-                cont = raw_input("Do you want to test them? (y/n): ")
+                cont = input("Do you want to test them? (y/n): ")
                 if cont[0] == "y":
                     refused_to_test_all_pps = False
                     cpt = 0
@@ -5510,13 +5506,13 @@ if __name__ == "__main__":
         for pbk in encrypted_keys[::-1]:
             p2pkh, p2wpkh, witaddr, _ = pubkey_info(pbk["public_key"], network)
             for addr in [p2pkh, p2wpkh, witaddr]:
-                has_balance = raw_input(addr + ": ") != ""
+                has_balance = input(addr + ": ") != ""
                 if has_balance:
                     print("")
                     break
             if not has_balance:
                 if (
-                    raw_input(
+                    input(
                         "\nAre you REALLY sure the 3 addresses above have an empty balance? (type 'YES') "
                     )
                     == "YES"
