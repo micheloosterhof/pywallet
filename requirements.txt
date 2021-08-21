@@ -1,2 +1,3 @@
 berkeleydb==18.1.4
 pycrypto==2.6.1
+ecdsa==0.17.0
