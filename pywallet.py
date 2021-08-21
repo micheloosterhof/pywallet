@@ -2649,7 +2649,7 @@ def read_wallet(
         if include_balance:
             # 			print("%3d/%d  %s  %s" % (i, nkeys, k["addr"], k["balance"]))
             k["balance"] = balance(balance_site, k["addr"])
-            print("  %s" % (i, nkeys, k["addr"], k["balance"]))
+            print("{} {} {}".format(i, nkeys, k["addr"], k["balance"]))
 
         if addr in json_db["names"].keys():
             k["label"] = json_db["names"][addr]
@@ -3507,42 +3507,6 @@ def p2sh_script_to_addr(script):
     return hash_160_to_bc_address(hash_160(script), version)
 
 
-def whitepaper():
-    try:
-        rawtx = subprocess.check_output(
-            [
-                "bitcoin-cli",
-                "getrawtransaction",
-                "54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713",
-            ]
-        )
-    except:
-        rawtx = urllib.request.urlopen(
-            "https://blockchain.info/tx/54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713?format=hex"
-        ).read()
-    outputs = rawtx.split("0100000000000000")
-    pdf = b""
-    for output in outputs[1:-2]:
-        i = 6
-        pdf += binascii.unhexlify(output[i : i + 130])
-        i += 132
-        pdf += binascii.unhexlify(output[i : i + 130])
-        i += 132
-        pdf += binascii.unhexlify(output[i : i + 130])
-    pdf += binascii.unhexlify(outputs[-2][6:-4])
-    content = pdf[8:-8]
-    assert (
-        hashlib.sha256(content).hexdigest()
-        == "b1674191a88ec5cdd733e4240a81803105dc412d6c6708d53ab94fc248f4f553"
-    )
-    filename = "bitcoin_whitepaper"
-    while os.path.exists(filename + ".pdf"):
-        filename += "_"
-    with open(filename + ".pdf", "wb") as f:
-        f.write(content)
-    print("Wrote the Bitcoin whitepaper to %s.pdf" % filename)
-
-
 class Xpriv(
     collections.namedtuple("XprivNT", "version depth prt_fpr childnr cc ktype key")
 ):
@@ -3899,12 +3863,6 @@ if __name__ == "__main__":
     )
 
     parser.add_option(
-        "--whitepaper",
-        action="store_true",
-        help="write the Bitcoin whitepaper using bitcoin-cli or blockchain.info",
-    )
-
-    parser.add_option(
         "--minimal_encrypted_copy",
         action="store_true",
         help="write a copy of an encrypted wallet with only an empty address, *should* be safe to share when needing help bruteforcing the password",
@@ -3936,10 +3894,6 @@ if __name__ == "__main__":
             'Warning: single quotes (\') may be parsed by your terminal, please use "H" for hardened keys'
         )
         dump_bip32_privkeys(*options.dump_bip32, format=options.bip32_format)
-        sys.exit()
-
-    if options.whitepaper:
-        whitepaper()
         sys.exit()
 
     if options.passphrase:
