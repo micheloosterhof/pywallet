@@ -54,15 +54,12 @@ import logging
 import struct
 import traceback
 import socket
-import types
-import string
 import hashlib
 import random
 import urllib
 import math
 import base64
 import collections
-import weakref
 import binascii
 from types import MethodType
 import unittest
