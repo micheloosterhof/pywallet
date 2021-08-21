@@ -2509,7 +2509,7 @@ def read_wallet(
             json_db["minversion"] = d["minversion"]
 
         elif type == b"setting":
-            if not json_db.has_key("settings"):
+            if not 'settings' in json_db:
                 json_db["settings"] = Bdict({})
             json_db["settings"][d["setting"]] = d["value"]
 
@@ -2536,7 +2536,7 @@ def read_wallet(
             )
 
         elif type == b"wkey":
-            if not json_db.has_key("wkey"):
+            if not "wkey" in json_db:
                 json_db["wkey"] = []
             json_db["wkey"]["created"] = d["created"]
 
