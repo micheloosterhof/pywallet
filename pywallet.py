@@ -2589,7 +2589,7 @@ def search_patterns_on_disk(
     except Exception as e:
         print("Can't open %s, check the path or try as root" % device)
         print("  Error: " + str(e.args))
-        exit(0)
+        sys.exit(0)
 
     i = 0
     data = b""
@@ -2970,7 +2970,7 @@ def first_read(device, size, prekeys, inc=10000):
         fd = os.open(device, os.O_RDONLY)
     except:
         print("Can't open %s, check the path or try as root" % device)
-        exit(0)
+        sys.exit(0)
     prekey = prekeys[0]
     data = b""
     i = 0
@@ -4399,14 +4399,14 @@ def create_transaction(
 
     if li1 != li2 or li2 != li3 or li3 != li4 or li4 != li5:
         print("Error in the number of tx inputs")
-        exit(0)
+        sys.exit(0)
 
     lo1 = len(amounts_txout)
     lo2 = len(scriptPubkey)
 
     if lo1 != lo2:
         print("Error in the number of tx outputs")
-        exit(0)
+        sys.exit(0)
 
     sig_txin = []
     i = 0
@@ -4455,7 +4455,7 @@ def create_transaction(
             print("sig %2d: verif ok" % i)
         except:
             print("sig %2d: verif error" % i)
-            exit(0)
+            sys.exit(0)
 
     # 	tx += end_of_wallettx([], int(time.time()))
     # 	return [inverse_str(hashtx), "027478" + hashtx, tx]
@@ -5245,29 +5245,29 @@ if __name__ == "__main__":
     # 	if nl > 2:
     # 		print('Bitcoin seems to be running: \n"%s"'%(aread))
     # 		if options.forcerun is None:
-    # 			exit(0)
+    # 			sys.exit(0)
 
     if options.tests:
         unittest.main(argv=sys.argv[:1] + ["TestPywallet"])
-        exit()
+        sys.exit()
 
     if options.dump_bip32:
         print(
             'Warning: single quotes (\') may be parsed by your terminal, please use "H" for hardened keys'
         )
         dump_bip32_privkeys(*options.dump_bip32, format=options.bip32_format)
-        exit()
+        sys.exit()
 
     if options.whitepaper:
         whitepaper()
-        exit()
+        sys.exit()
 
     if options.passphrase:
         passphrase = options.passphrase
 
     if not (options.clone_watchonly_from is None) and options.clone_watchonly_to:
         clone_wallet(options.clone_watchonly_from, options.clone_watchonly_to)
-        exit(0)
+        sys.exit(0)
 
     if options.recover:
         if (
@@ -5278,7 +5278,7 @@ if __name__ == "__main__":
             print(
                 "You must provide the device, the number of bytes to read and the output directory"
             )
-            exit(0)
+            sys.exit(0)
         device = options.recov_device
         if len(device) in [2, 3] and device[1] == ":":
             device = "\\\\.\\" + device
@@ -5364,11 +5364,11 @@ if __name__ == "__main__":
             )
         )
 
-        exit(0)
+        sys.exit(0)
 
-    if "bsddb" in missing_dep:
-        print("pywallet needs 'bsddb' package to run, please install it")
-        exit(0)
+    if "berkeleydb" in missing_dep:
+        print("pywallet needs 'berkeleydb' package to run, please install it")
+        sys.exit(0)
 
     if "ecdsa" in missing_dep:
         print(
@@ -5379,7 +5379,7 @@ if __name__ == "__main__":
         max_version = 10 ** 9
 
     if not (options.datadir is None):
-        print("Depreacation")
+        print("Deprecation")
         print(
             "  The --datadir option has been deprecated, now the full path of the wallet file should go to --wallet"
         )
@@ -5399,12 +5399,12 @@ if __name__ == "__main__":
                 "ERROR: wallet file %s can't be found"
                 % repr(os.path.realpath(options.walletfile))
             )
-            exit()
+            sys.exit()
         db_dir, wallet_name = os.path.split(os.path.realpath(options.walletfile))
 
     if not (options.key_balance is None):
         print(balance(balance_site, options.key_balance))
-        exit(0)
+        sys.exit(0)
 
     network = network_bitcoin
     if not (options.otherversion is None):
@@ -5443,12 +5443,12 @@ if __name__ == "__main__":
         keyinfo(options.key, network, True, False)
         print("")
         keyinfo(options.key, network, True, True)
-        exit(0)
+        sys.exit(0)
 
     if not db_dir:
         print("A mandatory option is missing\n")
         parser.print_help()
-        exit()
+        sys.exit()
     db_env = create_env(db_dir)
 
     if not (options.multidelete is None):
@@ -5463,8 +5463,8 @@ if __name__ == "__main__":
             print("%d element%s deleted" % (r, "s" * (int(r > 1))))
         except:
             print("Error: do not try to delete a non-existing transaction.")
-            exit(1)
-        exit(0)
+            sys.exit(1)
+        sys.exit(0)
 
     if options.minimal_encrypted_copy:
         db = open_wallet(db_env, wallet_name)
@@ -5522,16 +5522,16 @@ if __name__ == "__main__":
                     output_db.put(pbk["__key__"], pbk["__value__"])
                     output_db.close()
                     print("\nMinimal wallet written at %s" % minimal_wallet)
-                    exit()
+                    sys.exit()
                 else:
                     print(
                         "\nYou need to input zero character only when the balance is empty, exiting"
                     )
-                    exit()
+                    sys.exit()
         print(
             "\nError: all your addresses seem to be used, pywallet can't create a safe minimal wallet to share"
         )
-        exit()
+        sys.exit()
 
     read_wallet(
         json_db, db_env, wallet_name, True, True, "", not (options.dumpbalance is None)
@@ -5539,7 +5539,7 @@ if __name__ == "__main__":
 
     if json_db.get("minversion", 99999999) > max_version:
         print("Version mismatch (must be <= %d)" % max_version)
-        # exit(1)
+        # sys.exit(1)
 
     if options.find_address:
         addr_data = filter(
@@ -5547,7 +5547,7 @@ if __name__ == "__main__":
             json_db["keys"] + json_db["pool"],
         )
         print(json.dumps(list(addr_data), sort_keys=True, indent=4))
-        exit()
+        sys.exit()
 
     if options.dump:
         if options.dumpformat == "addr":
@@ -5555,7 +5555,7 @@ if __name__ == "__main__":
             json_db = addrs
         wallet = json.dumps(json_db, sort_keys=True, indent=4)
         print(wallet)
-        exit()
+        sys.exit()
     elif options.key:
         if json_db["version"] > max_version:
             print("Version mismatch (must be <= %d)" % max_version)
@@ -5570,4 +5570,4 @@ if __name__ == "__main__":
                 print("Bad private key")
 
             db.close()
-        exit()
+        sys.exit()
